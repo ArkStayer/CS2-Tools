@@ -9,6 +9,8 @@ from tkinter import messagebox
 import os
 import pydirectinput
 import sys
+import ctypes
+from ctypes import wintypes
 
 # RESOURCE PATH FUNCTION MUST BE AT THE TOP (always)
 def resource_path(relative_path):
@@ -39,6 +41,10 @@ def startscript3():
 def startscript4():
     btn5.config(state='disabled', text='Running...')
     thread = threading.Thread(target=spinbot, daemon=True)
+    thread.start()
+def startscript5():
+    btn6.config(state='disabled', text='Running...')
+    thread = threading.Thread(target=crosshair, daemon=True)
     thread.start()
 last_space_time = 0
 space_delay = 0.01  # 10ms delay between space presses
@@ -95,6 +101,56 @@ def autohop():
                 last_space_time = current_time
     
         time.sleep(0.001)
+def crosshair():
+    WS_EX_LAYERED = 0x80000
+    WS_EX_TRANSPARENT = 0x20
+    WS_EX_TOOLWINDOW = 0x80
+    GWL_EXSTYLE = -20
+    CROSSHAIR_COLOR = 'red'
+    CROSSHAIR_SIZE = 10
+    THICKNESS = 2
+    def make_clickthrough(hwnd):
+        style = ctypes.windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
+        style = style | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW
+        ctypes.windll.user32.SetWindowLongW(hwnd, GWL_EXSTYLE, style)
+        ctypes.windll.user32.SetLayeredWindowAttributes(hwnd, 0, 255, 0x01)
+    window = tk.Tk()
+    window.overrideredirect(True)
+    window.attributes('-topmost', True)
+    window.attributes('-transparentcolor', 'black')
+    w = window.winfo_screenwidth()
+    h = window.winfo_screenheight()
+    window.geometry(f"{w}x{h}+0+0")
+    window.config(bg='black')
+    canvas = tk.Canvas(window, bg='black', highlightthickness=0)
+    canvas.pack(fill=tk.BOTH, expand=True)
+    cx, cy = w//2, h//2
+    horizontal_line = canvas.create_line(
+        cx - CROSSHAIR_SIZE, cy,
+        cx + CROSSHAIR_SIZE, cy,
+        fill=CROSSHAIR_COLOR, width=THICKNESS
+    )
+    vertical_line = canvas.create_line(
+        cx, cy - CROSSHAIR_SIZE,
+        cx, cy + CROSSHAIR_SIZE,
+        fill=CROSSHAIR_COLOR, width=THICKNESS
+    )
+    make_clickthrough(canvas.winfo_id())
+    visible = True
+    def toggle_crosshair():
+        nonlocal visible
+        if visible:
+            canvas.itemconfig(horizontal_line, state='hidden')
+            canvas.itemconfig(vertical_line, state='hidden')
+            visible = False
+            print("Crosshair hidden")
+        else:
+            canvas.itemconfig(horizontal_line, state='normal')
+            canvas.itemconfig(vertical_line, state='normal')
+            visible = True
+            print("Crosshair showing")
+    keyboard.add_hotkey('n', toggle_crosshair)
+    window.mainloop()
 
 def run_sma():
     commands = ["alias colors \"colors0\"",
@@ -170,7 +226,7 @@ except Exception as e:
     print(f"Could not load icon: {e}")
 # logo image to replace default tk one (put the file name into the brackets after resource path.)
 
-win.geometry("325x220")
+win.geometry("325x270")
 
 btn = tk.Button(
     win,
@@ -201,6 +257,13 @@ btn5 = tk.Button(
     text='Start spinbot [L]',
     command=startscript4
 )
+btn6 = tk.Button(
+    win,
+    bg='blue',
+    fg='black',
+    text='Display Crosshair Overlay [L]',
+    command=startscript5
+)
 button_frame = tk.Frame(win)
 button_frame.pack(pady=10)
 # lower button vertically ^^^ ALSO ASSIGN TO FRAME OF WINDOW, MORE THAN 1 PACKED BUTTON  DOES NOT WORK ON WIN LAYER.
@@ -217,5 +280,6 @@ btn.pack()
 btn2.pack(pady=10)
 btn4.pack(pady=10)
 btn5.pack(pady=10)
+btn6.pack(pady=10)
 #always to .pack(option)
 win.mainloop()
