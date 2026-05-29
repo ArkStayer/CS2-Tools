@@ -17,6 +17,7 @@ import time
 import threading
 import mouse
 import webbrowser
+from tkinter import simpledialog
 import subprocess
 
 # RESOURCE PATH FUNCTION MUST BE AT THE TOP (always)
@@ -63,7 +64,7 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
     def spinbot():
         global moving, stop_moving
         pydirectinput.PAUSE = 0 # the thing to allow gfn compatability
-
+        
         moving = False # bools to spin
         stop_moving = False
         SPEED = 300  # speed
@@ -98,35 +99,12 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
         
         # run AHK using recomended app.
         subprocess.run([script_path], shell=True)
-    def macro():
-        global moving, stop_moving
-
-
-        moving = False # bools to spin
-        stop_moving = False
-
-        def move_continuously():
-            global moving, stop_moving
-            while not stop_moving:
-                if moving:
-                    mouse.click()  
-                time.sleep(0.00001)
-
-        def start_moving(): # move and stop move func
-            global moving
-            moving = True
-
-        def stop_moving_func():
-            global moving
-            moving = False
-
-        stop_moving = False
-
-        keyboard.on_press_key('j', lambda _: start_moving()) #func on
-        keyboard.on_release_key('j', lambda _: stop_moving_func()) #func off
-        movement_thread = threading.Thread(target=move_continuously, daemon=True) #threading to catch input
-        movement_thread.start()
-        keyboard.wait()
+    def macro():        # get path to the ahk script
+        script_path = resource_path("rapid.ahk")
+        
+        # run AHK using recomended app.
+        subprocess.run([script_path], shell=True)
+        
     def crosshair():
         WS_EX_LAYERED = 0x80000
         WS_EX_TRANSPARENT = 0x20
@@ -135,6 +113,40 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
         CROSSHAIR_COLOR = 'red'
         CROSSHAIR_SIZE = 10
         THICKNESS = 2
+        temp_root = tk.Tk()
+        temp_root.withdraw()
+        poscolors = ['red','green','cyan','blue','purple','black','white','pink']
+        color = simpledialog.askstring("Input", "Enter crosshair color, you may use these : red, green, cyan, blue, purple, black, white, pink",
+            parent=temp_root
+            )
+        if color in poscolors:
+            CROSSHAIR_COLOR = color
+            size = simpledialog.askstring("Input","Enter crosshair size (default is 10):", parent=temp_root)
+            if size.isdigit():
+                size = int(size)
+                CROSSHAIR_SIZE = size
+                width = simpledialog.askstring("Input","Enter crosshair width (default is 2):", parent=temp_root)
+                if width.isdigit():
+                    width = int(width)
+                    THICKNESS = width
+                else:
+                    CROSSHAIR_COLOR = 'red'
+                    CROSSHAIR_SIZE = 10
+                    THICKNESS = 2
+                    messagebox.showwarning("Warning","Invalid crosshair width, proceeding with default...")
+            else:
+                CROSSHAIR_COLOR = 'red'
+                CROSSHAIR_SIZE = 10
+                THICKNESS = 2
+                messagebox.showwarning("Warning","Invalid crosshair size, proceeding with default...")
+        else:
+            CROSSHAIR_COLOR = 'red'
+            CROSSHAIR_SIZE = 10
+            THICKNESS = 2
+            messagebox.showwarning("Warning","Invalid crosshair color, proceeding with default...")
+        ######################################### CHANGE THESE NOW!!!!
+
+        #########################################
         def make_clickthrough(hwnd):
             style = ctypes.windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
             style = style | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW
@@ -294,7 +306,7 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
         win,
         bg='pink',
         fg='black',
-        text='Rapid Fire [J]',
+        text='Rapid Fire',
         command=startscript6
     )
     button_frame = tk.Frame(win)
