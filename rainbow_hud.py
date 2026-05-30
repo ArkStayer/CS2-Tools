@@ -19,6 +19,8 @@ import mouse
 import webbrowser
 from tkinter import simpledialog
 import subprocess
+import pydirectinput
+import time
 
 # RESOURCE PATH FUNCTION MUST BE AT THE TOP (always)
 def resource_path(relative_path):
@@ -191,63 +193,130 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
         window.mainloop()
 
     def run_sma():
-        commands = ["alias colors \"colors0\"",
-        "alias colors0 \"cl_hud_color 0; alias colors colors1\"", 
-        "alias colors1 \"cl_hud_color 1; alias colors colors2\"", 
-        "alias colors2 \"cl_hud_color 2; alias colors colors3\"", 
-        "alias colors3 \"cl_hud_color 3; alias colors colors4\"", 
-        "alias colors4 \"cl_hud_color 4; alias colors colors5\"", 
-        "alias colors5 \"cl_hud_color 5; alias colors colors6\"", 
-        "alias colors6 \"cl_hud_color 6; alias colors colors7\"", 
-        "alias colors7 \"cl_hud_color 7; alias colors colors8\"", 
-        "alias colors8 \"cl_hud_color 8; alias colors colors9\"", 
-        "alias colors9 \"cl_hud_color 9; alias colors colors10\"", 
-        "alias colors10 \"cl_hud_color 10; alias colors colors11\"", 
-        "alias colors11 \"cl_hud_color 11; alias colors colors12\"", 
-        "alias colors12 \"cl_hud_color 12; alias colors colors13\"", 
-        "alias colors13 \"cl_hud_color 13; alias colors colors0\"", 
-        "bind mouse1 \"+attack; colors;\""
-        ]
-        for line in commands:
-            pyperclip.copy(line)
-            time.sleep(10)
-            keyboard.press_and_release('ctrl+v')
-            time.sleep(0.2)
-            keyboard.press_and_release('enter')
-        messagebox.showinfo('Rainbow Hud','Done')
-    # CMA CONFIG ^^^
+        def type_with_special_chars(text): #below info
+            i = 0
+            while i < len(text):
+                char = text[i]
+                
+                if char == '_':
+
+                    pydirectinput.keyDown('shift')
+                    pydirectinput.press('-')
+                    pydirectinput.keyUp('shift')
+                elif char == '+':
+
+                    pydirectinput.keyDown('shift')
+                    pydirectinput.press('=')
+                    pydirectinput.keyUp('shift')
+                elif char == '"':
+
+                    pydirectinput.keyDown('shift')
+                    pydirectinput.press("'")  
+                    pydirectinput.keyUp('shift')
+                else:
+
+                    pydirectinput.write(char)
+                
+
+                time.sleep(0.01)
+                i += 1
+
+        def run():
+            commands = [
+                'alias colors "colors0"',
+                'alias colors0 "cl_hud_color 0; alias colors colors1"', 
+                'alias colors1 "cl_hud_color 1; alias colors colors2"', 
+                'alias colors2 "cl_hud_color 2; alias colors colors3"', 
+                'alias colors3 "cl_hud_color 3; alias colors colors4"', 
+                'alias colors4 "cl_hud_color 4; alias colors colors5"', 
+                'alias colors5 "cl_hud_color 5; alias colors colors6"', 
+                'alias colors6 "cl_hud_color 6; alias colors colors7"', 
+                'alias colors7 "cl_hud_color 7; alias colors colors8"', 
+                'alias colors8 "cl_hud_color 8; alias colors colors9"', 
+                'alias colors9 "cl_hud_color 9; alias colors colors10"', 
+                'alias colors10 "cl_hud_color 10; alias colors colors11"', 
+                'alias colors11 "cl_hud_color 11; alias colors colors12"', 
+                'alias colors12 "cl_hud_color 12; alias colors colors13"', 
+                'alias colors13 "cl_hud_color 13; alias colors colors0"', 
+                'bind mouse1 "+attack; colors;"',
+            ]
+            
+            time.sleep(3)
+            
+            for i, line in enumerate(commands):
+                type_with_special_chars(line)
+                pydirectinput.press('enter')
+                time.sleep(0.2)
+            
+            messagebox.showinfo("Done!")
+
+        run()
+
     def run_script():
-        commands = ["alias colors \"colors0\"",
-        "alias colors0 \"cl_hud_color 0; alias colors colors1\"", 
-        "alias colors1 \"cl_hud_color 1; alias colors colors2\"", 
-        "alias colors2 \"cl_hud_color 2; alias colors colors3\"", 
-        "alias colors3 \"cl_hud_color 3; alias colors colors4\"", 
-        "alias colors4 \"cl_hud_color 4; alias colors colors5\"", 
-        "alias colors5 \"cl_hud_color 5; alias colors colors6\"", 
-        "alias colors6 \"cl_hud_color 6; alias colors colors7\"", 
-        "alias colors7 \"cl_hud_color 7; alias colors colors8\"", 
-        "alias colors8 \"cl_hud_color 8; alias colors colors9\"", 
-        "alias colors9 \"cl_hud_color 9; alias colors colors10\"", 
-        "alias colors10 \"cl_hud_color 10; alias colors colors11\"", 
-        "alias colors11 \"cl_hud_color 11; alias colors colors12\"", 
-        "alias colors12 \"cl_hud_color 12; alias colors colors13\"", 
-        "alias colors13 \"cl_hud_color 13; alias colors colors0\"", 
-        "bind d \"+right; colors;\"", 
-        "bind a \"+left; colors;\"", 
-        "bind w \"+forward; colors;\"", 
-        "bind s \"+back; colors;\"", 
-        "bind mouse1 \"+attack; colors;\"",
-        "bind space \"+jump; colors;\"",
-        "bind c \"+duck; colors;\"",
-        ]
-        for line in commands:
-            pyperclip.copy(line)
-            time.sleep(10)
-            keyboard.press_and_release('ctrl+v')
-            time.sleep(0.2)
-            keyboard.press_and_release('enter')
-        messagebox.showinfo('Rainbow HUD','Done')
-    # ^^^^^ normal one (rebind to ctrl if u dont use C)
+        def type_with_special_chars(text): # this is a temp fix for _ , ' and + for command pasting. if it aint broke, dont fix it.
+            i = 0
+            while i < len(text):
+                char = text[i]
+                
+                if char == '_':
+
+                    pydirectinput.keyDown('shift')
+                    pydirectinput.press('-')
+                    pydirectinput.keyUp('shift')
+                elif char == '+':
+
+                    pydirectinput.keyDown('shift')
+                    pydirectinput.press('=')
+                    pydirectinput.keyUp('shift')
+                elif char == '"':
+
+                    pydirectinput.keyDown('shift')
+                    pydirectinput.press("'")  
+                    pydirectinput.keyUp('shift')
+                else:
+
+                    pydirectinput.write(char)
+                
+
+                time.sleep(0.01)
+                i += 1
+
+        def run():
+            commands = [
+                'alias colors "colors0"',
+                'alias colors0 "cl_hud_color 0; alias colors colors1"', 
+                'alias colors1 "cl_hud_color 1; alias colors colors2"', 
+                'alias colors2 "cl_hud_color 2; alias colors colors3"', 
+                'alias colors3 "cl_hud_color 3; alias colors colors4"', 
+                'alias colors4 "cl_hud_color 4; alias colors colors5"', 
+                'alias colors5 "cl_hud_color 5; alias colors colors6"', 
+                'alias colors6 "cl_hud_color 6; alias colors colors7"', 
+                'alias colors7 "cl_hud_color 7; alias colors colors8"', 
+                'alias colors8 "cl_hud_color 8; alias colors colors9"', 
+                'alias colors9 "cl_hud_color 9; alias colors colors10"', 
+                'alias colors10 "cl_hud_color 10; alias colors colors11"', 
+                'alias colors11 "cl_hud_color 11; alias colors colors12"', 
+                'alias colors12 "cl_hud_color 12; alias colors colors13"', 
+                'alias colors13 "cl_hud_color 13; alias colors colors0"', 
+                'bind d "+right; colors;"', 
+                'bind a "+left; colors;"', 
+                'bind w "+forward; colors;"', 
+                'bind s "+back; colors;"', 
+                'bind mouse1 "+attack; colors;"',
+                'bind space "+jump; colors;"',
+                'bind c "+duck; colors;"',
+            ]
+            
+            time.sleep(3)
+            
+            for i, line in enumerate(commands):
+                type_with_special_chars(line)
+                pydirectinput.press('enter')
+                time.sleep(0.2)
+            
+            messagebox.showinfo("Done!")
+
+        run()
 
     win = Tk()
     win.configure(bg='black')
@@ -256,7 +325,6 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
 
     try:
         logo_path = resource_path("logo.png")
-
         logo_image = Image.open(logo_path)
         icon = ImageTk.PhotoImage(logo_image)
         win.iconphoto(False, icon)
