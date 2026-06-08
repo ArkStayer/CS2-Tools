@@ -1,7 +1,7 @@
 # CS2-Tools
 Arkstayer's CS2 Tools
 This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It is also Geforce Now Compatible.
-# ! IMPORTANT: FOR THE BHOP FUNCTION YOU MUST HAVE AUTOHOTKEY INSTALLED IN DEFAULT LOCATION!
+# ! IMPORTANT: WHEN USING ANY INPUT MACROS (AUTOBHOP etc.) when you are done playing, close the AHK processes using Task Manager (might add autoclosing later)
 # Functions:
 1. Rainbow HUD (Use if you play through GFN, not on your PC, because you will be just wasting your time, just make a .cfg file with the commands in the python script and put it in the cfg folder of cs2.)
 2. Rainbow HUD CMA Version (the same rainbow HUD but only on shoot/kill)
