@@ -21,7 +21,8 @@ from tkinter import simpledialog
 import subprocess
 import pydirectinput
 import time
-
+import psutil
+import string
 # RESOURCE PATH FUNCTION MUST BE AT THE TOP (always)
 def resource_path(relative_path):
     try:
@@ -32,8 +33,29 @@ def resource_path(relative_path):
     
     return os.path.join(base_path, relative_path)
 # ^^^^ this whole thing above makes images and files port into the exe when run on other PC.
+import os
 
-if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
+def scan():
+    common_paths = [
+        r'Program Files\AutoHotkey'
+    ]
+    
+    drives = [f'{d}:\\' for d in string.ascii_uppercase if os.path.exists(f'{d}:\\')]
+    
+
+    
+    for drive in drives:
+        for rel_path in common_paths:
+            full_path = os.path.join(drive, rel_path)
+            if os.path.isdir(full_path):
+                return full_path
+    
+    return None
+
+
+ahk_path = scan()
+    
+if ahk_path:
     def startscript():
         btn.config(state='disabled', text='Running...')
         thread = threading.Thread(target=run_script, daemon=True)
@@ -58,6 +80,10 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
     def startscript6():
         btn7.config(state='disabled', text='Running...')
         thread = threading.Thread(target=macro, daemon=True)
+        thread.start()
+    def startscript7():
+        btn8.config(state='disabled', text='Running...')
+        thread = threading.Thread(target=lineup, daemon=True)
         thread.start()
     last_space_time = 0
     space_delay = 0.01  # 10ms delay between space presses
@@ -103,6 +129,24 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
         subprocess.run([script_path], shell=True)
     def macro():        # get path to the ahk script
         script_path = resource_path("rapid.ahk")
+        
+        # run AHK using recomended app.
+        subprocess.run([script_path], shell=True)
+    def lineup():        # get path to the ahk script
+        def is_numlock_on():
+            # check numlock
+            VK_NUMLOCK = 0x90
+            user32 = ctypes.windll.user32
+            # GetKeyState
+            # and then check the lowest bit (1 = toggled on).
+            return (user32.GetKeyState(VK_NUMLOCK) & 0xFFFF) != 0
+        
+
+        if is_numlock_on():
+            print("already numlock'd")
+        else:
+            keyboard.press_and_release('num lock')
+        script_path = resource_path("lineup.ahk")
         
         # run AHK using recomended app.
         subprocess.run([script_path], shell=True)
@@ -317,12 +361,14 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
             messagebox.showinfo("Done!")
 
         run()
-
     win = Tk()
-    win.configure(bg='black')
+    win.configure(bg='#04000d')
     win.title("ArkStayer's CS2 Tools")
     # bg and title window ^^^^
-
+ #   prebackground = Image.open(resource_path("bg.png"))
+  #  background = ImageTk.PhotoImage(prebackground)
+  #  bg_label = tk.Label(win, image=background)
+  #  bg_label.place(x=0, y=0, relwidth=1, relheight=1)
     try:
         logo_path = resource_path("logo.png")
         logo_image = Image.open(logo_path)
@@ -332,58 +378,81 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
         print(f"Could not load icon: {e}")
     # logo image to replace default tk one (put the file name into the brackets after resource path.)
 
-    win.geometry("350x400")
+    win.geometry("440x490")
 
     btn = tk.Button(
         win,
-        bg='green',
-        fg='black',
         text='Start Rainbow Hud',
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
         command=startscript
     )
     #Normal button ^^^
     btn2 = tk.Button(
         win,
-        bg='cyan',
-        fg='black',
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
         text='Start Rainbow Hud (CMA version)',
         command=startscript2
     )
     btn4 = tk.Button(
         win,
-        bg='purple',
-        fg='black',
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
         text='Start AutoBHOP',
         command=startscript3
     )
     btn5 = tk.Button(
         win,
-        bg='orange',
-        fg='black',
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
         text='Start spinbot [L]',
         command=startscript4
     )
     btn6 = tk.Button(
         win,
-        bg='blue',
-        fg='black',
-        text='Display Crosshair Overlay [L]',
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
+        text='Display Crosshair Overlay [N]',
         command=startscript5
     )
     btn7 = tk.Button(
         win,
-        bg='pink',
-        fg='black',
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
         text='Rapid Fire',
         command=startscript6
+    )
+    btn8 = tk.Button(
+        win,
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
+        text='Auto JumpThrow(Numpad 1 , 3)',
+        command=startscript7
     )
     button_frame = tk.Frame(win)
     button_frame.pack(pady=10)
     # lower button vertically ^^^ ALSO ASSIGN TO FRAME OF WINDOW, MORE THAN 1 PACKED BUTTON  DOES NOT WORK ON WIN LAYER.
     exitbtn = tk.Button(
         button_frame,
-        bg='red',
-        fg='black',
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='#ff123d',
         text='Exit',
         command=win.destroy
     )
@@ -395,12 +464,22 @@ if messagebox.askyesno("Info","Do you have Auto Hotkey installed?"):
     btn5.pack(pady=10)
     btn6.pack(pady=10)
     btn7.pack(pady=10)
+    btn8.pack(pady=10)
+    def on_closing():
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                if proc.info['name'] and 'autohotkey' in proc.info['name'].lower():
+                    proc.terminate()  # or proc.kill() for force kill
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        win.destroy()
 
     #always to .pack(option)
+    win.protocol("WM_DELETE_WINDOW", on_closing)
     win.mainloop()
 else:
     print("no hotkey")
-    messagebox.showinfo("Info","Click OK to install AHK...")
-    webbrowser.open("https://github.com/AutoHotkey/AutoHotkey/releases/tag/v1.1.37.01")
-    messagebox.showinfo("Info","Relaunch the .exe once you installed AHK")
+    messagebox.showinfo("Info","Click OK to run AHK installer (Install V 1.1.37.2), then relaunch the program.")
+    script_path = resource_path("install_autohotkey.exe")
+    subprocess.run([script_path], shell=True)
 
