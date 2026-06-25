@@ -85,6 +85,10 @@ if ahk_path:
         btn8.config(state='disabled', text='Running...')
         thread = threading.Thread(target=lineup, daemon=True)
         thread.start()
+    def startscript8():
+        btn9.config(state='disabled', text='Running...')
+        thread = threading.Thread(target=arrowbot, daemon=True)
+        thread.start()
     last_space_time = 0
     space_delay = 0.01  # 10ms delay between space presses
     bhopping = False
@@ -121,6 +125,101 @@ if ahk_path:
 
         print(f"Hold 'l' to move right at speed: {SPEED}")
         keyboard.wait()
+    def arrowbot():
+        global moving_right, stop_moving_right, moving_left, stop_moving_left
+        global moving_up, stop_moving_up, moving_down, stop_moving_down
+        pydirectinput.PAUSE = 0  # the thing to allow gfn compatability
+        
+        moving_right = False
+        stop_moving_right = False
+        moving_left = False
+        stop_moving_left = False
+        moving_up = False
+        stop_moving_up = False
+        moving_down = False
+        stop_moving_down = False
+        SPEED = 15  # speed
+
+        def move_right_continuously():
+            global moving_right, stop_moving_right
+            while not stop_moving_right:
+                if moving_right:
+                    pydirectinput.moveRel(SPEED, 0, relative=True)  # Positive X = right
+                time.sleep(0.001)
+
+        def move_left_continuously():
+            global moving_left, stop_moving_left
+            while not stop_moving_left:
+                if moving_left:
+                    pydirectinput.moveRel(-SPEED, 0, relative=True)  # Negative X = left
+                time.sleep(0.001)
+
+        def move_up_continuously():
+            global moving_up, stop_moving_up
+            while not stop_moving_up:
+                if moving_up:
+                    pydirectinput.moveRel(0, -SPEED, relative=True)  # Negative Y = up
+                time.sleep(0.001)
+
+        def move_down_continuously():
+            global moving_down, stop_moving_down
+            while not stop_moving_down:
+                if moving_down:
+                    pydirectinput.moveRel(0, SPEED, relative=True)  # Positive Y = down
+                time.sleep(0.001)
+
+        def start_moving_right():
+            global moving_right
+            moving_right = True
+
+        def stop_moving_right_func():
+            global moving_right
+            moving_right = False
+
+        def start_moving_left():
+            global moving_left
+            moving_left = True
+
+        def stop_moving_left_func():
+            global moving_left
+            moving_left = False
+
+        def start_moving_up():
+            global moving_up
+            moving_up = True
+
+        def stop_moving_up_func():
+            global moving_up
+            moving_up = False
+
+        def start_moving_down():
+            global moving_down
+            moving_down = True
+
+        def stop_moving_down_func():
+            global moving_down
+            moving_down = False
+
+        # Start threads
+        right_thread = threading.Thread(target=move_right_continuously, daemon=True)
+        right_thread.start()
+        left_thread = threading.Thread(target=move_left_continuously, daemon=True)
+        left_thread.start()
+        up_thread = threading.Thread(target=move_up_continuously, daemon=True)
+        up_thread.start()
+        down_thread = threading.Thread(target=move_down_continuously, daemon=True)
+        down_thread.start()
+
+        # Bind keys
+        keyboard.on_press_key('right', lambda _: start_moving_right())
+        keyboard.on_release_key('right', lambda _: stop_moving_right_func())
+        keyboard.on_press_key('left', lambda _: start_moving_left())
+        keyboard.on_release_key('left', lambda _: stop_moving_left_func())
+        keyboard.on_press_key('up', lambda _: start_moving_up())
+        keyboard.on_release_key('up', lambda _: stop_moving_up_func())
+        keyboard.on_press_key('down', lambda _: start_moving_down())
+        keyboard.on_release_key('down', lambda _: stop_moving_down_func())
+
     def autohop():
         # get path to the ahk script
         script_path = resource_path("bhop.ahk")
@@ -190,7 +289,7 @@ if ahk_path:
             CROSSHAIR_SIZE = 10
             THICKNESS = 2
             messagebox.showwarning("Warning","Invalid crosshair color, proceeding with default...")
-        ######################################### CHANGE THESE NOW!!!!
+        #########################################
 
         #########################################
         def make_clickthrough(hwnd):
@@ -235,6 +334,9 @@ if ahk_path:
                 print("Crosshair showing")
         keyboard.add_hotkey('n', toggle_crosshair)
         window.mainloop()
+    def endsc():
+        print("exiting")
+        win.destroy()
 
     def run_sma():
         def type_with_special_chars(text): #below info
@@ -378,7 +480,7 @@ if ahk_path:
         print(f"Could not load icon: {e}")
     # logo image to replace default tk one (put the file name into the brackets after resource path.)
 
-    win.geometry("440x490")
+    win.geometry("440x540")
 
     btn = tk.Button(
         win,
@@ -444,6 +546,23 @@ if ahk_path:
         text='Auto JumpThrow(Numpad 1 , 3)',
         command=startscript7
     )
+    btn9 = tk.Button(
+        win,
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
+        text='Controller (arrow keys)',
+        command=startscript8
+    )
+    def on_closing():
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                if proc.info['name'] and 'autohotkey' in proc.info['name'].lower():
+                    proc.terminate()  # or proc.kill() for force kill
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        win.destroy()    
     button_frame = tk.Frame(win)
     button_frame.pack(pady=10)
     # lower button vertically ^^^ ALSO ASSIGN TO FRAME OF WINDOW, MORE THAN 1 PACKED BUTTON  DOES NOT WORK ON WIN LAYER.
@@ -454,7 +573,7 @@ if ahk_path:
         bg='#06001f',
         fg='#ff123d',
         text='Exit',
-        command=win.destroy
+        command=on_closing
     )
     # EXIT BUTTON ^^^^
     exitbtn.pack()
@@ -465,15 +584,7 @@ if ahk_path:
     btn6.pack(pady=10)
     btn7.pack(pady=10)
     btn8.pack(pady=10)
-    def on_closing():
-        for proc in psutil.process_iter(['pid', 'name']):
-            try:
-                if proc.info['name'] and 'autohotkey' in proc.info['name'].lower():
-                    proc.terminate()  # or proc.kill() for force kill
-            except (psutil.NoSuchProcess, psutil.AccessDenied):
-                pass
-        win.destroy()
-
+    btn9.pack(pady=10)
     #always to .pack(option)
     win.protocol("WM_DELETE_WINDOW", on_closing)
     win.mainloop()
