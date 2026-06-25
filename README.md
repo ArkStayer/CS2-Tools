@@ -1,15 +1,16 @@
 # CS2-Tools
 Arkstayer's CS2 Tools
 This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It is also Geforce Now Compatible.
-# ! IMPORTANT: WHEN USING ANY INPUT MACROS (AUTOBHOP etc.) when you are done playing, close the AHK processes using Task Manager (might add autoclosing later)
+# ! IMPORTANT: i am btn8.pack(pady=10)
 # Functions:
-1. Rainbow HUD (Use if you play through GFN, not on your PC, because you will be just wasting your time, just make a .cfg file with the commands in the python script and put it in the cfg folder of cs2.)
+1. Rainbow HUD (Use if you play through GFN, not on your PC, because you will be just wasting your time, just make a autoexec.cfg file with the commands in the python script and put it in the cfg folder of cs2.)
 2. Rainbow HUD CMA Version (the same rainbow HUD but only on shoot/kill)
 3. AutoBHOP (it depends on luck, but if you hit the first bhop with a positive speed boost, you will be able to hit 2-3 afterwards.)
 4. Spinbot (IT WORKS EVERYWHERE (both GFN and local)
 5. Crosshair Overlay.
 6. Rapid fire.
 7. Auto jumpthrow/ lineup.
+8. Controller simulation. (When used, on press of the arrow keys, it will move you r mouse accordingly in a straight line, use for trolling people).
 # Usage:
 1. Rainbow HUD. To Use rainbow HUD click the TKINTER button for the Rainbow HUD, then go into cs2 window (must be focused on) and open console. THe script will paste in the commands for rainbow HUD, when done you will have a "DONE" msgbox displayed.
 2. AutoBHOP. Hold Space
@@ -17,6 +18,7 @@ This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It i
 4. Crosshair overlay makes an external overlay crosshair to help aim with SSG  or an Awp
 5. For rapid fire hold left mouse button. (very useful on Dual Berettas)
 6. For Auto Jumpthrow, press numpad 1 for standard (NO HOLDING BEFORE INPUT), and numpad 3 for holding and when you only need to release and jump.
+7. Controller simulation: When used, on press of the arrow keys, it will move you r mouse accordingly in a straight line, use for trolling people.
 # Info:
 NONE of these features will get you banned, these do not affect or cheat in the game in any way.
 If you want to redact the spinbot speed just download the script and change the values. then recompile using PyInstaller.
