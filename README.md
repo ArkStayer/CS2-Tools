@@ -1,7 +1,7 @@
 # CS2-Tools
 Arkstayer's CS2 Tools
 This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It is also Geforce Now Compatible.
-# ! IMPORTANT: don't
+# ! IMPORTANT: if you are looking for the main script (to compile yourself) its named rainbow_hud.py
 # Functions:
 1. Rainbow HUD (Use if you play through GFN, not on your PC, because you will be just wasting your time, just make a autoexec.cfg file with the commands in the python script and put it in the cfg folder of cs2.)
 2. Rainbow HUD CMA Version (the same rainbow HUD but only on shoot/kill)
