@@ -1,6 +1,5 @@
 import keyboard
 import time
-import pyperclip
 import tkinter as tk
 from tkinter import *
 from PIL import ImageTk, Image
@@ -15,14 +14,21 @@ import pyautogui
 import keyboard
 import time
 import threading
-import mouse
-import webbrowser
 from tkinter import simpledialog
 import subprocess
 import pydirectinput
 import time
 import psutil
 import string
+state = False
+def toggle():
+    global state
+    if state == True:
+        state = False
+    else:
+        state = True
+
+
 # RESOURCE PATH FUNCTION MUST BE AT THE TOP (always)
 def resource_path(relative_path):
     try:
@@ -60,71 +66,87 @@ if ahk_path:
         btn.config(state='disabled', text='Running...')
         thread = threading.Thread(target=run_script, daemon=True)
         thread.start()
-    #threading to make apps run instantly( use threading.Thread and the put the target function, daemon should be True.)
+
     def startscript2():
         btn2.config(state='disabled', text='Running...')
         thread = threading.Thread(target=run_sma, daemon=True)
         thread.start()
+
     def startscript3():
         btn4.config(state='disabled', text='Running...')
         thread = threading.Thread(target=autohop, daemon=True)
         thread.start()
+
     def startscript4():
         btn5.config(state='disabled', text='Running...')
         thread = threading.Thread(target=spinbot, daemon=True)
         thread.start()
+
     def startscript5():
         btn6.config(state='disabled', text='Running...')
         thread = threading.Thread(target=crosshair, daemon=True)
         thread.start()
+
     def startscript6():
         btn7.config(state='disabled', text='Running...')
         thread = threading.Thread(target=macro, daemon=True)
         thread.start()
+
     def startscript7():
         btn8.config(state='disabled', text='Running...')
         thread = threading.Thread(target=lineup, daemon=True)
         thread.start()
+
     def startscript8():
         btn9.config(state='disabled', text='Running...')
         thread = threading.Thread(target=arrowbot, daemon=True)
+        thread.start()
+    def startscript9():
+        btn10.config(state='disabled', text='Running...')
+        thread = threading.Thread(target=snaptap, daemon=True)
         thread.start()
     last_space_time = 0
     space_delay = 0.01  # 10ms delay between space presses
     bhopping = False
     p_pressed_last = False
     def spinbot():
-        global moving, stop_moving
-        pydirectinput.PAUSE = 0 # the thing to allow gfn compatability
-        
-        moving = False # bools to spin
-        stop_moving = False
-        SPEED = 300  # speed
-
-        def move_continuously():
+        global state
+        if state == False:
             global moving, stop_moving
-            while not stop_moving:
-                if moving:
-                    pydirectinput.moveRel(SPEED, 0, relative=True) # while L is held, spin.
-                time.sleep(0.001)
+            pydirectinput.PAUSE = 0 # the thing to allow gfn compatability
+            
+            moving = False # bools to spin
+            stop_moving = False
+            SPEED = 300  # speed
 
-        def start_moving(): # move and stop move func
-            global moving
-            moving = True
+            def move_continuously():
+                global moving, stop_moving
+                while not stop_moving:
+                    if moving:
+                        pydirectinput.moveRel(SPEED, 0, relative=True) # while L is held, spin.
+                    time.sleep(0.001)
 
-        def stop_moving_func():
-            global moving
-            moving = False
+            def start_moving(): # move and stop move func
+                global moving
+                moving = True
 
-        stop_moving = False
-        movement_thread = threading.Thread(target=move_continuously, daemon=True) #threading to catch input
-        movement_thread.start()
+            def stop_moving_func():
+                global moving
+                moving = False
 
-        keyboard.on_press_key('l', lambda _: start_moving()) #func on
-        keyboard.on_release_key('l', lambda _: stop_moving_func()) #func off
+            stop_moving = False
+            movement_thread = threading.Thread(target=move_continuously, daemon=True) #threading to catch input
+            movement_thread.start()
 
-        print(f"Hold 'l' to move right at speed: {SPEED}")
-        keyboard.wait()
+            keyboard.on_press_key('l', lambda _: start_moving()) #func on
+            keyboard.on_release_key('l', lambda _: stop_moving_func()) #func off
+
+
+            toggle()
+
+
+            print(f"Hold 'l' to move right at speed: {SPEED}")
+            keyboard.wait()
     def arrowbot():
         global moving_right, stop_moving_right, moving_left, stop_moving_left
         global moving_up, stop_moving_up, moving_down, stop_moving_down
@@ -223,6 +245,12 @@ if ahk_path:
     def autohop():
         # get path to the ahk script
         script_path = resource_path("bhop.ahk")
+        
+        # run AHK using recomended app.
+        subprocess.run([script_path], shell=True)
+    def snaptap():
+        # get path to the ahk script
+        script_path = resource_path("snaptap.ahk")
         
         # run AHK using recomended app.
         subprocess.run([script_path], shell=True)
@@ -480,7 +508,7 @@ if ahk_path:
         print(f"Could not load icon: {e}")
     # logo image to replace default tk one (put the file name into the brackets after resource path.)
 
-    win.geometry("440x540")
+    win.geometry("440x610")
 
     btn = tk.Button(
         win,
@@ -555,6 +583,15 @@ if ahk_path:
         text='Controller (arrow keys)',
         command=startscript8
     )
+    btn10 = tk.Button(
+        win,
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
+        text='Snap Tap',
+        command=startscript9
+    )
     def on_closing():
         for proc in psutil.process_iter(['pid', 'name']):
             try:
@@ -585,6 +622,7 @@ if ahk_path:
     btn7.pack(pady=10)
     btn8.pack(pady=10)
     btn9.pack(pady=10)
+    btn10.pack(pady=10)
     #always to .pack(option)
     win.protocol("WM_DELETE_WINDOW", on_closing)
     win.mainloop()
