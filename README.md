@@ -11,6 +11,7 @@ This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It i
 6. Rapid fire.
 7. Auto jumpthrow/ lineup.
 8. Controller simulation. (When used, on press of the arrow keys, it will move you r mouse accordingly in a straight line, use for trolling people).
+9. Snap Tap
 # Usage:
 1. Rainbow HUD. To Use rainbow HUD click the TKINTER button for the Rainbow HUD, then go into cs2 window (must be focused on) and open console. THe script will paste in the commands for rainbow HUD, when done you will have a "DONE" msgbox displayed.
 2. AutoBHOP. Hold Space
@@ -19,6 +20,7 @@ This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It i
 5. For rapid fire hold left mouse button. (very useful on Dual Berettas)
 6. For Auto Jumpthrow, press numpad 1 for standard (NO HOLDING BEFORE INPUT), and numpad 3 for holding and when you only need to release and jump.
 7. Controller simulation: When used, on press of the arrow keys, it will move you r mouse accordingly in a straight line, use for trolling people.
+8. Snap Tap makes for easier strafing, if you already enabled autobhop, do not enable it, it comes pre packaged.
 # Info:
 NONE of these features will get you banned, these do not affect or cheat in the game in any way.
 If you want to redact the spinbot speed just download the script and change the values. then recompile using PyInstaller.
