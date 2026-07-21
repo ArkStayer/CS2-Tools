@@ -66,44 +66,42 @@ if ahk_path:
         btn.config(state='disabled', text='Running...')
         thread = threading.Thread(target=run_script, daemon=True)
         thread.start()
-
     def startscript2():
         btn2.config(state='disabled', text='Running...')
         thread = threading.Thread(target=run_sma, daemon=True)
         thread.start()
-
     def startscript3():
-        btn4.config(state='disabled', text='Running...')
         thread = threading.Thread(target=autohop, daemon=True)
         thread.start()
-
     def startscript4():
         btn5.config(state='disabled', text='Running...')
         thread = threading.Thread(target=spinbot, daemon=True)
         thread.start()
-
     def startscript5():
         btn6.config(state='disabled', text='Running...')
         thread = threading.Thread(target=crosshair, daemon=True)
         thread.start()
-
     def startscript6():
-        btn7.config(state='disabled', text='Running...')
         thread = threading.Thread(target=macro, daemon=True)
         thread.start()
-
     def startscript7():
-        btn8.config(state='disabled', text='Running...')
         thread = threading.Thread(target=lineup, daemon=True)
         thread.start()
-
     def startscript8():
         btn9.config(state='disabled', text='Running...')
         thread = threading.Thread(target=arrowbot, daemon=True)
         thread.start()
     def startscript9():
-        btn10.config(state='disabled', text='Running...')
         thread = threading.Thread(target=snaptap, daemon=True)
+        thread.start()
+    def startscript10():
+        thread = threading.Thread(target=kswitch, daemon=True)
+        thread.start()
+    def startscript11():
+        thread = threading.Thread(target=altlook, daemon=True)
+        thread.start()
+    def startscript12():
+        thread = threading.Thread(target=killahk, daemon=True)
         thread.start()
     last_space_time = 0
     space_delay = 0.01  # 10ms delay between space presses
@@ -160,7 +158,7 @@ if ahk_path:
         stop_moving_up = False
         moving_down = False
         stop_moving_down = False
-        SPEED = 15  # speed
+        SPEED = 500  # speed
 
         def move_right_continuously():
             global moving_right, stop_moving_right
@@ -254,11 +252,31 @@ if ahk_path:
         
         # run AHK using recomended app.
         subprocess.run([script_path], shell=True)
-    def macro():        # get path to the ahk script
-        script_path = resource_path("rapid.ahk")
+    def kswitch():
+        # get path to the ahk script
+        script_path = resource_path("kswitch.ahk")
         
         # run AHK using recomended app.
         subprocess.run([script_path], shell=True)
+    def altlook():
+        # get path to the ahk script
+        script_path = resource_path("altlook.ahk")
+        
+        # run AHK using recomended app.
+        subprocess.run([script_path], shell=True)
+    def macro():        # get path to the ahk script
+        script_path = resource_path("rapid.ahk")
+
+        
+        # run AHK using recomended app.
+        subprocess.run([script_path], shell=True)
+    def killahk():
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                if proc.info['name'] and 'autohotkey' in proc.info['name'].lower():
+                    proc.terminate()  # or proc.kill() for force kill
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
     def lineup():        # get path to the ahk script
         def is_numlock_on():
             # check numlock
@@ -508,7 +526,7 @@ if ahk_path:
         print(f"Could not load icon: {e}")
     # logo image to replace default tk one (put the file name into the brackets after resource path.)
 
-    win.geometry("440x610")
+    win.geometry("440x800")
 
     btn = tk.Button(
         win,
@@ -571,7 +589,7 @@ if ahk_path:
         border= 0,
         bg='#06001f',
         fg='cyan',
-        text='Auto JumpThrow(Numpad 1 , 3)',
+        text='Auto JumpThrow[Numpad 1 , 3]',
         command=startscript7
     )
     btn9 = tk.Button(
@@ -580,7 +598,7 @@ if ahk_path:
         border= 0,
         bg='#06001f',
         fg='cyan',
-        text='Controller (arrow keys)',
+        text='Controller [Arrow Keys]',
         command=startscript8
     )
     btn10 = tk.Button(
@@ -591,6 +609,33 @@ if ahk_path:
         fg='cyan',
         text='Snap Tap',
         command=startscript9
+    )
+    btn11 = tk.Button(
+        win,
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
+        text='Cheater kill animation [Z]',
+        command=startscript10
+    )
+    btn12 = tk.Button(
+        win,
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
+        text='Look behind [Alt]',
+        command=startscript11
+    )
+    btn13 = tk.Button(
+        win,
+        font=('Helvetica', 14, 'bold'),
+        border= 0,
+        bg='#06001f',
+        fg='cyan',
+        text='Stop AHK scripts',
+        command=startscript12
     )
     def on_closing():
         for proc in psutil.process_iter(['pid', 'name']):
@@ -623,7 +668,9 @@ if ahk_path:
     btn8.pack(pady=10)
     btn9.pack(pady=10)
     btn10.pack(pady=10)
-    #always to .pack(option)
+    btn11.pack(pady=10)
+    btn12.pack(pady=10)
+    btn13.pack(pady=10)
     win.protocol("WM_DELETE_WINDOW", on_closing)
     win.mainloop()
 else:
