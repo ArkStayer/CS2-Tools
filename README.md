@@ -1,7 +1,7 @@
 # CS2-Tools
 Arkstayer's CS2 Tools
 This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It is also Geforce Now Compatible.
-# ! IMPORTANT: if you are looking for the main script (to compile yourself) its named rainbow_hud.py
+# ! IMPORTANT: You might have mouse 
 # Functions:
 1. Rainbow HUD (Use if you play through GFN, not on your PC, because you will be just wasting your time, just make a autoexec.cfg file with the commands in the python script and put it in the cfg folder of cs2.)
 2. Rainbow HUD CMA Version (the same rainbow HUD but only on shoot/kill)
@@ -12,6 +12,8 @@ This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It i
 7. Auto jumpthrow/ lineup.
 8. Controller simulation. (When used, on press of the arrow keys, it will move you r mouse accordingly in a straight line, use for trolling people).
 9. Snap Tap
+10. Fake Cheater animation on kill.
+11. Alt looking behind you.
 # Usage:
 1. Rainbow HUD. To Use rainbow HUD click the TKINTER button for the Rainbow HUD, then go into cs2 window (must be focused on) and open console. THe script will paste in the commands for rainbow HUD, when done you will have a "DONE" msgbox displayed.
 2. AutoBHOP. Hold Space
@@ -21,6 +23,8 @@ This is a script (or a compiled .exe in releases) to do funny stuff in cs2. It i
 6. For Auto Jumpthrow, press numpad 1 for standard (NO HOLDING BEFORE INPUT), and numpad 3 for holding and when you only need to release and jump.
 7. Controller simulation: When used, on press of the arrow keys, it will move you r mouse accordingly in a straight line, use for trolling people.
 8. Snap Tap makes for easier strafing, if you already enabled autobhop, do not enable it, it comes pre packaged.
+9. Fake Cheater animation (makes you spinbot behind and above you for a split second, realistic.) to toggle it on and off use Z.
+10. Alt looking by holding Alt, on release it snaps back.
 # Info:
 NONE of these features will get you banned, these do not affect or cheat in the game in any way.
 If you want to redact the spinbot speed just download the script and change the values. then recompile using PyInstaller.
